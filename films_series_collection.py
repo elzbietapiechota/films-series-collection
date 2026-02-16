@@ -5,7 +5,7 @@ from datetime import datetime
 fake = Faker()
 
 
-class BaseTvContent:
+class Movies:
     
    def __init__(self, title, year, genre, views):
         self.title = title
@@ -16,16 +16,11 @@ class BaseTvContent:
    def play(self, step=1):
        self.views += step
        return self.views 
-  
-class Movies(BaseTvContent):
-   
-   def __init__(self, *args, **kwargs):
-       super().__init__(*args, **kwargs)
     
    def __str__(self):
        return f"{self.title} ({self.year})"
    
-class Series(BaseTvContent):
+class Series(Movies):
    
    def __init__(self, episode, season, *args, **kwargs):
        super().__init__(*args, **kwargs)
@@ -35,11 +30,9 @@ class Series(BaseTvContent):
    def __str__(self):
        return f"{self.title} S{self.season}E{self.episode}"  
 
-
-content = []
-
 def create_content():
-
+    content = []
+    
     for movie_title in movie_titles:
 
         movies = Movies(
@@ -59,38 +52,38 @@ def create_content():
             season=f"{random.randint(1, 10):02}",
             views=fake.random_int(min=0, max=100))
         content.append(series)
+    
+    return content
 
+def get_movies(content):
 
-def get_movies():
-
-    by_movies = [item for item in content if isinstance(item, Movies)]
+    by_movies = [item for item in content if type(item) is Movies]
     return sorted(by_movies, key=lambda item: item.title)
 
-def get_series():
+def get_series(content):
     
-    by_series = [item for item in content if isinstance(item, Series)]
+    by_series = [item for item in content if type(item) is Series]
     return sorted(by_series, key=lambda item: item.title)
 
-def generate_views():
+def generate_views(content):
 
     item_of_content = random.choice(content)
     number_of_views = random.randint(1, 100)
     
     for i in range(number_of_views):
         item_of_content.play()
-    
-def run_generate_views():
-    for i in range(10):
-        generated_views = generate_views()
-    return generated_views
 
-def top_titles(content_type, amount):
+def run_generate_views(content):
+    for i in range(10):
+        generate_views(content)
+    
+def top_titles(content, content_type, amount):
     
     if content_type == Movies:
-        filtered_top_titles = [item for item in content if isinstance(item, Movies)]
+        filtered_top_titles = get_movies(content)
     
     elif content_type == Series:
-        filtered_top_titles = [item for item in content if isinstance(item, Series)]
+        filtered_top_titles = get_series(content)
 
     else:
         filtered_top_titles = content
@@ -101,7 +94,7 @@ def top_titles(content_type, amount):
     for item in filtered_top_titles:
         print(f"{item}")
 
-def search(title):
+def search(content, title):
     search_result = [item for item in content if title.lower() in item.title.lower()]
     
     if search_result:
@@ -109,7 +102,6 @@ def search(title):
             print(f"Tytuł {item} znajduje się w bibliotece")
     else:
         print(f"Niestety tytułu {title} nie ma w bibliotece")
-
 
 movie_titles = [
     "Dzień świra", 
@@ -152,19 +144,19 @@ genres = [
 
 
 if __name__ == '__main__':
-    create_content()
+
+    content = create_content()
 
     print("Biblioteka filmów:")   
-    for item in get_movies():
+    for item in get_movies(content):
         print(item)
     print()
 
-    run_generate_views()
+    run_generate_views(content)
 
     print(f"Najpopularniejsze filmy i seriale dnia {datetime.now().strftime('%d.%m.%Y')}:")
-    top_titles(None, 3)
+    top_titles(content, None, 3)
     print()
 
     print("Wyszukiwanie tytułów w bibliotece:")
-    search("'Oczy'")
-    
+    search(content, "'Oczy'")
