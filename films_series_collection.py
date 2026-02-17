@@ -30,7 +30,7 @@ class Series(Movies):
    def __str__(self):
        return f"{self.title} S{self.season}E{self.episode}"  
 
-def create_content():
+def create_content(movie_titles, series_titles, genres):
     content = []
     
     for movie_title in movie_titles:
@@ -103,49 +103,49 @@ def search(content, title):
     else:
         print(f"Niestety tytułu {title} nie ma w bibliotece")
 
-movie_titles = [
-    "Dzień świra", 
-    "Chłopaki nie płaczą", 
-    "Pianista", 
-    "Bogowie", 
-    "Zimna wojna", 
-    "Boże Ciało", 
-    "Katyń", 
-    "Killer", 
-    "Psy", 
-    "Wołyń"
-    ]
-
-series_titles = [
-    "Wataha",
-    "1670",
-    "Ranczo",
-    "Ślepnąc od świateł",
-    "Wielka woda",
-    "Kruk",
-    "Belfer",
-    "Król",
-    "Odwróceni",
-    "Rojst"
-    ]
-
-genres = [
-    "Dramat",
-    "Komedia",
-    "Kryminał",
-    "Sci-Fi",
-    "Thriller",
-    "Horror",
-    "Dokumentalny",
-    "Akcja",
-    "Fantasy",
-    "Historyczny"
-    ]
-
-
+        
 if __name__ == '__main__':
 
-    content = create_content()
+    movie_titles = [
+        "Dzień świra", 
+        "Chłopaki nie płaczą", 
+        "Pianista", 
+        "Bogowie", 
+        "Zimna wojna", 
+        "Boże Ciało", 
+        "Katyń", 
+        "Killer", 
+        "Psy", 
+        "Wołyń"
+        ]
+
+    series_titles = [
+        "Wataha",
+        "1670",
+        "Ranczo",
+        "Ślepnąc od świateł",
+        "Wielka woda",
+        "Kruk",
+        "Belfer",
+        "Król",
+        "Odwróceni",
+        "Rojst"
+        ]
+
+    genres = [
+        "Dramat",
+        "Komedia",
+        "Kryminał",
+        "Sci-Fi",
+        "Thriller",
+        "Horror",
+        "Dokumentalny",
+        "Akcja",
+        "Fantasy",
+        "Historyczny"
+        ]
+    
+    content = create_content(movie_titles, series_titles, genres)
 
     print("Biblioteka filmów:")   
     for item in get_movies(content):
